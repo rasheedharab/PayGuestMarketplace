@@ -112,27 +112,29 @@ export class DatabaseStorage implements IStorage {
     amenities?: string[];
     search?: string;
   }): Promise<Property[]> {
-    let query = db.select().from(properties).where(eq(properties.isActive, true));
+    let conditions = [eq(properties.isActive, true)];
     
     if (filters?.city) {
-      query = query.where(ilike(properties.city, `%${filters.city}%`));
+      conditions.push(ilike(properties.city, `%${filters.city}%`));
     }
     
     if (filters?.propertyType) {
-      query = query.where(eq(properties.propertyType, filters.propertyType as any));
+      conditions.push(eq(properties.propertyType, filters.propertyType as any));
     }
     
     if (filters?.search) {
-      query = query.where(
+      conditions.push(
         or(
           ilike(properties.name, `%${filters.search}%`),
           ilike(properties.address, `%${filters.search}%`),
           ilike(properties.city, `%${filters.search}%`)
-        )
+        )!
       );
     }
     
-    const result = await query.orderBy(desc(properties.createdAt));
+    const result = await db.select().from(properties)
+      .where(and(...conditions))
+      .orderBy(desc(properties.createdAt));
     return result;
   }
 
@@ -174,7 +176,7 @@ export class DatabaseStorage implements IStorage {
       .update(properties)
       .set({ isActive: false, updatedAt: new Date() })
       .where(eq(properties.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Room operations
@@ -216,7 +218,7 @@ export class DatabaseStorage implements IStorage {
       .update(rooms)
       .set({ isActive: false, updatedAt: new Date() })
       .where(eq(rooms.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Bed operations
@@ -260,27 +262,36 @@ export class DatabaseStorage implements IStorage {
     propertyId?: number;
     status?: string;
   }): Promise<Booking[]> {
-    let query = db.select().from(bookings);
+    let conditions: any[] = [];
     
     if (filters?.customerId) {
-      query = query.where(eq(bookings.customerId, filters.customerId));
+      conditions.push(eq(bookings.customerId, filters.customerId));
     }
     
     if (filters?.propertyId) {
-      query = query.where(eq(bookings.propertyId, filters.propertyId));
+      conditions.push(eq(bookings.propertyId, filters.propertyId));
     }
     
     if (filters?.status) {
-      query = query.where(eq(bookings.status, filters.status as any));
+      conditions.push(eq(bookings.status, filters.status as any));
     }
     
     if (filters?.ownerId) {
-      query = query
+      const result = await db
+        .select()
+        .from(bookings)
         .leftJoin(properties, eq(bookings.propertyId, properties.id))
-        .where(eq(properties.ownerId, filters.ownerId));
+        .where(and(eq(properties.ownerId, filters.ownerId), ...(conditions.length > 0 ? conditions : [])))
+        .orderBy(desc(bookings.createdAt));
+      return result.map(r => r.bookings);
     }
     
-    const result = await query.orderBy(desc(bookings.createdAt));
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+    const result = await db
+      .select()
+      .from(bookings)
+      .where(whereClause)
+      .orderBy(desc(bookings.createdAt));
     return result;
   }
 
