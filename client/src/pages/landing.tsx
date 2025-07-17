@@ -7,6 +7,18 @@ export default function Landing() {
     window.location.href = "/api/login";
   };
 
+  const handleListProperty = () => {
+    // Store the intended destination for after login
+    sessionStorage.setItem('redirect_after_login', '/list-property');
+    window.location.href = "/api/login";
+  };
+
+  const handleFindProperties = () => {
+    // Store the intended destination for after login
+    sessionStorage.setItem('redirect_after_login', '/marketplace');
+    window.location.href = "/api/login";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 to-secondary/10">
       {/* Header */}
@@ -39,7 +51,7 @@ export default function Landing() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              onClick={handleLogin} 
+              onClick={handleFindProperties} 
               size="lg" 
               className="bg-primary hover:bg-primary/90 text-lg px-8 py-3"
             >
@@ -47,7 +59,7 @@ export default function Landing() {
               Find Properties
             </Button>
             <Button 
-              onClick={handleLogin} 
+              onClick={handleListProperty} 
               variant="outline" 
               size="lg" 
               className="text-lg px-8 py-3 border-primary text-primary hover:bg-primary hover:text-white"

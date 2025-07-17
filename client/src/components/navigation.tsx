@@ -47,15 +47,26 @@ export default function Navigation() {
             </Link>
             
             {isAuthenticated && user?.userType === "owner" && (
-              <Link href="/dashboard">
-                <div className={`px-3 py-2 font-medium cursor-pointer ${
-                  location === "/dashboard"
-                    ? "text-gray-900 border-b-2 border-primary"
-                    : "text-gray-500 hover:text-primary"
-                }`}>
-                  Owner Dashboard
-                </div>
-              </Link>
+              <>
+                <Link href="/dashboard">
+                  <div className={`px-3 py-2 font-medium cursor-pointer ${
+                    location === "/dashboard"
+                      ? "text-gray-900 border-b-2 border-primary"
+                      : "text-gray-500 hover:text-primary"
+                  }`}>
+                    Owner Dashboard
+                  </div>
+                </Link>
+                <Link href="/list-property">
+                  <div className={`px-3 py-2 font-medium cursor-pointer ${
+                    location === "/list-property"
+                      ? "text-gray-900 border-b-2 border-primary"
+                      : "text-gray-500 hover:text-primary"
+                  }`}>
+                    List Your Property
+                  </div>
+                </Link>
+              </>
             )}
 
             {isAuthenticated ? (
@@ -128,18 +139,32 @@ export default function Navigation() {
             </Link>
             
             {isAuthenticated && user?.userType === "owner" && (
-              <Link href="/dashboard">
-                <div
-                  className={`block px-3 py-2 font-medium cursor-pointer ${
-                    location === "/dashboard"
-                      ? "text-gray-900 bg-gray-50"
-                      : "text-gray-500 hover:text-primary"
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Owner Dashboard
-                </div>
-              </Link>
+              <>
+                <Link href="/dashboard">
+                  <div
+                    className={`block px-3 py-2 font-medium cursor-pointer ${
+                      location === "/dashboard"
+                        ? "text-gray-900 bg-gray-50"
+                        : "text-gray-500 hover:text-primary"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Owner Dashboard
+                  </div>
+                </Link>
+                <Link href="/list-property">
+                  <div
+                    className={`block px-3 py-2 font-medium cursor-pointer ${
+                      location === "/list-property"
+                        ? "text-gray-900 bg-gray-50"
+                        : "text-gray-500 hover:text-primary"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    List Your Property
+                  </div>
+                </Link>
+              </>
             )}
 
             {isAuthenticated ? (
