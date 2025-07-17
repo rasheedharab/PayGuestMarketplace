@@ -16,8 +16,8 @@ interface SearchFormProps {
 
 export default function SearchForm({ onSearch }: SearchFormProps) {
   const [location, setLocation] = useState("");
-  const [propertyType, setPropertyType] = useState("");
-  const [budget, setBudget] = useState("");
+  const [propertyType, setPropertyType] = useState("all");
+  const [budget, setBudget] = useState("any");
 
   const handleSearch = () => {
     onSearch({
@@ -57,7 +57,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="single_room">Single Room</SelectItem>
                 <SelectItem value="shared_room">Shared Room</SelectItem>
                 <SelectItem value="apartment">Apartment</SelectItem>
@@ -75,7 +75,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
                 <SelectValue placeholder="Any Budget" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Any Budget</SelectItem>
+                <SelectItem value="any">Any Budget</SelectItem>
                 <SelectItem value="5000-10000">₹5,000 - ₹10,000</SelectItem>
                 <SelectItem value="10000-20000">₹10,000 - ₹20,000</SelectItem>
                 <SelectItem value="20000-">₹20,000+</SelectItem>

@@ -13,8 +13,8 @@ import { Search, Wifi, Utensils, Car, Dumbbell, SlidersHorizontal } from "lucide
 export default function Marketplace() {
   const [searchFilters, setSearchFilters] = useState({
     location: "",
-    propertyType: "",
-    budget: "",
+    propertyType: "all",
+    budget: "any",
     amenities: [] as string[],
   });
 
@@ -23,8 +23,10 @@ export default function Marketplace() {
     queryFn: async () => {
       const params = new URLSearchParams();
       if (searchFilters.location) params.append("search", searchFilters.location);
-      if (searchFilters.propertyType) params.append("propertyType", searchFilters.propertyType);
-      if (searchFilters.budget) {
+      if (searchFilters.propertyType && searchFilters.propertyType !== "all") {
+        params.append("propertyType", searchFilters.propertyType);
+      }
+      if (searchFilters.budget && searchFilters.budget !== "any") {
         const [min, max] = searchFilters.budget.split("-");
         if (min) params.append("minPrice", min);
         if (max) params.append("maxPrice", max);
